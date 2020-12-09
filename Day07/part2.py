@@ -21,19 +21,31 @@ def generate_bag_mapping(bag_rules):
     return bag_mapping
 
 
+def merge_dicts(dict1, dict2):
+    result = dict1
+    for key, value in dict2.items():
+        current = result.get(key, 0)
+        result[key] = current + value
+
+    return result
+
+
 def child_bags(bag_mapping, parent_bag):
-    result = {parent_bag}
-    for bag in bag_mapping[parent_bag]:
-        result |= child_bags(bag_mapping, bag[1])
+    parent_bag_name = parent_bag[1]
+    parent_bag_count = parent_bag[0]
+    result = {parent_bag_name: parent_bag_count}
+    for bag in bag_mapping[parent_bag_name]:
+        child_contents = child_bags(bag_mapping, bag)
+
+        merge_dicts(result, {k: v*parent_bag_count for (k, v) in child_contents.items()})
 
     return result
 
 
 def number_bags_contained(bag_mapping, requested_bag):
-    bag_count = 0
     result = child_bags(bag_mapping, requested_bag)
 
-    return bag_count
+    return sum(result.values()) - 1
 
 
 if __name__ == "__main__":
