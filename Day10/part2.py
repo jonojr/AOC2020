@@ -1,4 +1,3 @@
-import sys
 from collections import defaultdict
 
 MEMOIZED_VALUES = defaultdict(lambda: 0)
@@ -7,7 +6,6 @@ MEMOIZED_VALUES[0] = 1
 
 
 if __name__ == "__main__":
-    sys.setrecursionlimit(9000)
     with open("input.txt", 'r') as input_file:
         values = [0]
         values.extend([int(value) for value in input_file.read().split("\n")])
